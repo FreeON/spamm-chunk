@@ -36,6 +36,18 @@ module chunk_types
 
   implicit none
 
+  !> The tree node type.
+  type :: tree_node
+  end type tree_node
+
+  !> The tree matrix type, i.e. an array of one unrolled tier of a tree.
+  type :: tree_matrix
+
+     !> The unrolled tier.
+     type(tree_node), allocatable :: tier(:, :)
+
+  end type tree_matrix
+
   !> The chunk type.
   type :: spamm_chunk
 
@@ -47,6 +59,9 @@ module chunk_types
      !> \f[ N_{c} = N_{b}*2^d \f],
      !> where \f$ d \f$ is an integer.
      integer :: chunk_size = 16
+
+     !> The unrolled tree.
+     type(tree_matrix), allocatable :: tree(:)
 
   end type spamm_chunk
 
