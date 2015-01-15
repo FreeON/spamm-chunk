@@ -7,6 +7,7 @@ add_executable( chunk_multiply chunk_multiply.c bcsr.h bcsr.c )
 add_executable( chunk_SP2 chunk_SP2.c bcsr.h bcsr.c )
 
 include_directories( ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src )
+
 set_target_properties( chunk_add
   chunk_add_identity
   chunk_scale
@@ -17,13 +18,14 @@ set_target_properties( chunk_add
   PROPERTIES
   COMPILE_FLAGS "${STDC} ${OpenMP_C_FLAGS} ${MIC_CFLAGS}"
   LINK_FLAGS "${OpenMP_C_FLAGS} ${MIC_LDFLAGS}" )
-target_link_libraries( chunk_add libchunk ${MATHLIB} )
-target_link_libraries( chunk_add_identity libchunk ${MATHLIB} )
-target_link_libraries( chunk_scale libchunk ${MATHLIB} )
-target_link_libraries( chunk_trace libchunk ${MATHLIB} )
-target_link_libraries( chunk_tree_alloc libchunk ${MATHLIB} )
-target_link_libraries( chunk_multiply libchunk ${MATHLIB} )
-target_link_libraries( chunk_SP2 libchunk ${MATHLIB} )
+
+target_link_libraries( chunk_add chunk-C ${MATHLIB} )
+target_link_libraries( chunk_add_identity chunk-C ${MATHLIB} )
+target_link_libraries( chunk_scale chunk-C ${MATHLIB} )
+target_link_libraries( chunk_trace chunk-C ${MATHLIB} )
+target_link_libraries( chunk_tree_alloc chunk-C ${MATHLIB} )
+target_link_libraries( chunk_multiply chunk-C ${MATHLIB} )
+target_link_libraries( chunk_SP2 chunk-C ${MATHLIB} )
 
 add_test( chunk_add
   ${CMAKE_CURRENT_BINARY_DIR}/chunk_add )

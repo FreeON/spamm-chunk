@@ -1,4 +1,4 @@
-add_library( libchunk
+add_library( chunk-C
   chunk.c
   chunk_block.c
   chunk_tiled.c
@@ -8,20 +8,25 @@ add_library( libchunk
   lapack_interface.h
   matrix_4x4.S
   )
-include_directories( ${CMAKE_BINARY_DIR} )
-set_target_properties( libchunk
+set_target_properties( chunk-C
   PROPERTIES
   COMPILE_FLAGS "${STDC} ${OpenMP_C_FLAGS} ${MIC_CFLAGS}"
   LINK_FLAGS "${MIC_LDFLAGS}" )
 
-set( headers
-	chunk.h
-	chunk_block.h
-	chunk_tiled.h
-	chunk_tree.h
-	)
+add_library( chunk-F
+  chunk_types.F90
+  )
 
-install( TARGETS libchunk
+include_directories( ${CMAKE_BINARY_DIR} )
+
+set( headers
+  chunk.h
+  chunk_block.h
+  chunk_tiled.h
+  chunk_tree.h
+  )
+
+install( TARGETS chunk-C
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib )
 install( FILES ${headers}
