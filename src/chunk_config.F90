@@ -1,4 +1,4 @@
-!> The chunk module.
+!> The chunk configuration parameters.
 !!
 !! @copyright
 !!
@@ -32,18 +32,15 @@
 !!
 !! @author Matt Challacombe matt.challacombe@freeon.org
 !! @author Nicolas Bock nicolasbock@freeon.org
-module chunk_types
+module chunk_config
 
-  use chunk_config
+  !> The basic block size.
+  integer, parameter :: BLOCK_SIZE = CONFIG_BLOCK_SIZE
 
-  implicit none
+  !> The chunk size.
+  integer, parameter :: CHUNK_SIZE = CONFIG_CHUNK_SIZE
 
-  !> The chunk type.
-  type :: spamm_chunk
+  !> The kind of reals we are using.
+  integer, parameter :: SPAMM_KIND = REAL_KIND_EXPRESSION
 
-     !> The unrolled tree.
-     real(SPAMM_KIND), allocatable :: tree(:)
-
-  end type spamm_chunk
-
-end module chunk_types
+end module chunk_config

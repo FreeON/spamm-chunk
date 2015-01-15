@@ -162,6 +162,22 @@ set( DEBUG_OUTPUT FALSE
 set( DEBUG_OUTPUT_MATRIX FALSE
   CACHE BOOL "Print the matrices for debugging" )
 
+set( CONFIG_BLOCK_SIZE 4
+  CACHE STRING "The size of the basic dense sub-matrix blocks" )
+
+set( CONFIG_CHUNK_SIZE 32
+  CACHE STRING "The size of the chunk sub-matrix" )
+
+set( CONFIG_REAL_KIND "double"
+  CACHE STRING "The real kind (single, double)" )
+if( CONFIG_REAL_KIND STREQUAL "single" )
+  set( REAL_KIND_EXPRESSION "kind(1e0)" )
+elseif( CONFIG_REAL_KIND STREQUAL "double" )
+  set( REAL_KIND_EXPRESSION "kind(1d0)" )
+else()
+  message( FATAL_ERROR "CONFIG_REAL_KIND = [ single, double ]" )
+endif()
+
 configure_file( config.h.in config.h )
 
 enable_testing()

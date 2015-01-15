@@ -1,4 +1,4 @@
-!> The chunk module.
+!> The chunk configuration parameters.
 !!
 !! @copyright
 !!
@@ -32,18 +32,8 @@
 !!
 !! @author Matt Challacombe matt.challacombe@freeon.org
 !! @author Nicolas Bock nicolasbock@freeon.org
-module chunk_types
+module spamm_chunk
 
-  use chunk_config
+  use chunk_types
 
-  implicit none
-
-  !> The chunk type.
-  type :: spamm_chunk
-
-     !> The unrolled tree.
-     real(SPAMM_KIND), allocatable :: tree(:)
-
-  end type spamm_chunk
-
-end module chunk_types
+end module spamm_chunk

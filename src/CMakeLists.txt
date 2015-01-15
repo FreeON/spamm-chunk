@@ -14,7 +14,15 @@ set_target_properties( chunk-C
   LINK_FLAGS "${MIC_LDFLAGS}" )
 
 add_library( chunk-F
+  chunk_config.F90
   chunk_types.F90
+  spamm_chunk.F90
+  )
+target_compile_definitions( chunk-F
+  PUBLIC
+  "CONFIG_BLOCK_SIZE=${CONFIG_BLOCK_SIZE}"
+  "CONFIG_CHUNK_SIZE=${CONFIG_CHUNK_SIZE}"
+  "REAL_KIND_EXPRESSION=${REAL_KIND_EXPRESSION}"
   )
 
 include_directories( ${CMAKE_BINARY_DIR} )
