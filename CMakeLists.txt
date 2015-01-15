@@ -1,4 +1,4 @@
-project( chunklib C ASM Fortran )
+project( spamm-chunk C ASM Fortran )
 cmake_minimum_required( VERSION 2.8 )
 
 include( FindOpenMP )
@@ -6,11 +6,69 @@ include( CheckCSourceCompiles )
 include( CheckCCompilerFlag )
 include( CheckFunctionExists )
 
+if( NOT CMAKE_BUILD_TYPE )
+  set( CMAKE_BUILD_TYPE Debug )
+  message( STATUS "Setting default build type to ${CMAKE_BUILD_TYPE}" )
+endif()
+
+if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
+  set( TEMP_FLAGS
+    "-O0 -g -gdwarf-3"
+    "-std=f2008"
+    "-fvar-tracking-assignments -fcheck=all"
+    "-ffree-line-length-none"
+    "-Wall -Wimplicit-interface -Wuninitialized -Wimplicit-procedure"
+    )
+  string( TOUPPER ${CMAKE_BUILD_TYPE} UPPER_BUILD_TYPE )
+  if( UPPER_BUILD_TYPE STREQUAL "DEBUG" )
+    try_compile( HAVE_ADDRESS_SANITIZER
+      ${CMAKE_BINARY_DIR}/CMakeTmp
+      ${CMAKE_SOURCE_DIR}/cmake-tests/address-sanitizer
+      address-sanitizer
+      OUTPUT_VARIABLE ADDRESS_SANITIZER_OUTPUT
+      )
+    if( HAVE_ADDRESS_SANITIZER )
+      message( STATUS "Adding address sanitizer compiler flag" )
+      list( APPEND TEMP_FLAGS "-fsanitize=address" )
+    else()
+      message( STATUS "Address sanitizer not supported" )
+    endif()
+  endif()
+  string( REGEX REPLACE ";" " " CMAKE_Fortran_FLAGS_DEBUG "${TEMP_FLAGS}" )
+  set( CMAKE_Fortran_FLAGS_RELEASE "-Ofast -g -ffree-line-length-none" )
+elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
+  set( CMAKE_Fortran_FLAGS_DEBUG
+    "-stand f08 -O0 -g"
+    "-extend-source"
+    "-debug all -check all"
+    "-warn unused -traceback"
+    )
+  string( REGEX REPLACE ";" " " CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG}" )
+  set( CMAKE_Fortran_FLAGS_RELEASE "-O3 -no-prec-div -fp-model fast=2 -vec-report -g" )
+else()
+  message( STATUS "Unknown Fortran compiler ${CMAKE_Fortran_COMPILER_ID}" )
+endif()
+
 check_c_compiler_flag( "-std=gnu99" C99_CONFORM )
 if( NOT C99_CONFORM )
   message( WARNING "Can not set C compiler to C99 standard" )
 else()
   set( STDC "-std=gnu99" )
+endif()
+
+include( FindDoxygen )
+if( DOXYGEN_DOT_FOUND )
+  set( HAVE_DOT "YES" )
+else()
+  set( HAVE_DOT "NO" )
+endif()
+
+configure_file( Doxyfile.in Doxyfile )
+
+if( DOXYGEN_FOUND )
+  add_custom_target( doc
+    COMMAND ${DOXYGEN_EXECUTABLE}
+    )
 endif()
 
 check_function_exists( clock_gettime FOUND_GETTIME )

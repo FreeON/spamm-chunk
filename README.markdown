@@ -1,4 +1,4 @@
-A SpAMM tree inside a contiguous memory chunk
+A SpAMM implementation inside a contiguous memory chunk
 
 # Introduction
 
@@ -27,4 +27,5 @@ make test
 # Current build status
 
 The current status of our test builds on Travis-ci is
-[![Build Status](https://travis-ci.org/FreeON/spamm-chunk.svg?branch=master)](https://travis-ci.org/FreeON/spamm-chunk).
+
+[![Build Status](https://travis-ci.org/FreeON/spamm-chunk.svg?branch=master)](https://travis-ci.org/FreeON/spamm-chunk)
